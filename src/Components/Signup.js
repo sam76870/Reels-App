@@ -1,15 +1,29 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { AuthContext } from '../Context/AuthProvider';
 import { storage, database } from '../firebase';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper'
+import Container from '@material-ui/core/Container'
+import Image from '../Components/main.png';
+import { useHistory } from 'react-router-dom';
+
+const useStyle = makeStyles({
+    PaperContainer: {
+        // backgroundImage: `url(${Image})`,
+        // color: "#f5f5f5"
+    }
+})
 
 function Signup() {
+    const history = useHistory();
+    const classes = useStyle();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [file, setFile] = useState(null);
-    const { signup } = useContext(AuthContext);
+    const { signup, currentUser } = useContext(AuthContext);
 
     // console.log(signup);
     const handleSignUp = async (e) => {
@@ -53,14 +67,15 @@ function Signup() {
                     userId: uid,
                     username: name,
                     createdAt: database.getCurrentTimeStamp(),
-                    profielUrl: downloadUrl,
-                    postsId: []
+                    profileUrl: downloadUrl,
+                    postIds: []
                 })
 
 
             }
             setLoading(false);
             console.log('user has signedup');
+            history.push('/');
         }
         catch (err) {
             console.log(err);
@@ -76,28 +91,37 @@ function Signup() {
             setFile(file);
         }
     }
+    useEffect(() => {
+        if (currentUser) {
+            history.push('/');
+        }
+    }, [])
     return (
-        <div>
-            <form onSubmit={handleSignUp}>
-                <div>
-                    <label htmlFor=''>UserName</label>
-                    <input type='text' value={name} onChange={(e) => setName(e.target.value)} />
-                </div>
-                <div>
-                    <label htmlFor=''>Email</label>
-                    <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div>
-                    <label htmlFor=''>Password</label>
-                    <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
-                </div>
-                <div>
-                    <label htmlFor='profile'>Profile Image</label>
-                    <input type='file' accept='image*/' onChange={handleFilesSubmit} />
-                </div>
-                <button type='submit' disabled={loading}>Sign In</button>
-            </form>
-        </div>
+        <Container maxWidth='lg'>
+            <Paper>
+                <div className={classes.PaperContainer}>
+                    <form onSubmit={handleSignUp}>
+                        <div>
+                            <label htmlFor=''>UserName</label>
+                            <input type='text' value={name} onChange={(e) => setName(e.target.value)} />
+                        </div>
+                        <div>
+                            <label htmlFor=''>Email</label>
+                            <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
+                        </div>
+                        <div>
+                            <label htmlFor=''>Password</label>
+                            <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                        </div>
+                        <div>
+                            <label htmlFor='profile'>Profile Image</label>
+                            <input type='file' accept='image*/' onChange={handleFilesSubmit} />
+                        </div>
+                        <button type='submit' disabled={loading}>Sign Up</button>
+                    </form>
+                </div >
+            </Paper>
+        </Container>
     )
 }
 

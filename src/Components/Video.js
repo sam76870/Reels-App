@@ -2,6 +2,7 @@ import React from 'react'
 import './Video.css'
 import ReactDom from 'react-dom';
 function Video(props) {
+    // console.log(props);
     const handleMute = (e) => {
         e.preventDefault();
         e.target.muted = !e.target.muted;

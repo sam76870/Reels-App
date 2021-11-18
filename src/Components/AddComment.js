@@ -10,7 +10,7 @@ const useStyle = makeStyles({
         marginTop: '4%'
     }
 })
-function AddComment({userData=null,postData=null}) {
+function AddComment({ userData = null, postData = null }) {
     const classes = useStyle();
     const [text, setText] = useState('');
     const manageComment = (e) => {

@@ -1,6 +1,7 @@
 import React from 'react'
 
 function Videos(props) {
+    // console.log(props);
     const handleMute = (e) => {
         e.preventDefault();
         e.target.muted = !e.target.muted;

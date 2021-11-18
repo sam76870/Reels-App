@@ -66,9 +66,10 @@ const useStyles = makeStyles({
 });
 
 function Posts({ userData = null }) {
+    // console.log(userData.postIds);
     const classes = useStyles();
     const [posts, setPosts] = useState(null);
-    const [openId, setOpenId] = useState(null); 
+    const [openId, setOpenId] = useState(null);
     const callback = entries => {
         entries.forEach(element => {
             // console.log(element);
@@ -82,11 +83,12 @@ function Posts({ userData = null }) {
         });
     }
     const handleClickOpen = (id) => {
-        setOpenId(id);
-      };
-      const handleClose = () => {
+            // if(id!=userData.postIds)
+            setOpenId();
+    };
+    const handleClose = () => {
         setOpenId(null);
-      };
+    };
     const observer = new IntersectionObserver(callback, { threshold: 0.85 });
     useEffect(() => {
         let parr = [];
@@ -113,14 +115,12 @@ function Posts({ userData = null }) {
         }
     }, [posts])
     return (
-        <>
-            <div className='place'>
-            </div>
+        <><div className='place'></div>
             {posts == null ? <CircularProgress className={classes.loader} color='secondary' /> :
                 <div className='video-container' id='video-container'>
                     {
                         posts.map((post, index) => (
-                            <React.Fragment key={post.pId}>
+                            <React.Fragment key={post.postId}>
                                 <div className='videos'>
                                     <Video source={post.pUrl} id={post.pId} />
                                     <div className='fa' style={{ display: 'flex' }}>
@@ -128,26 +128,40 @@ function Posts({ userData = null }) {
                                         <h4>{post.uName}</h4>
                                     </div>
                                     <Likes userData={userData} postData={post} />
-                                    <ChatBubbleIcon onClick={() => handleClickOpen(post.pId)} className={`${classes.ci} icon-styling`} />
-                                    <Dialog maxWidth="md" onClose={handleClose} aria-labelledby="customized-dialog-title" 
-                                    open={openId === post.pId}
-                                    >
+                                    <ChatBubbleIcon
+                                        onClick={() => handleClickOpen(post.pId)}
+                                        className={`${classes.ci} icon-styling`} />
+                                    <Dialog
+                                        maxWidth="md"
+                                        onClose={handleClose}
+                                        aria-labelledby="customized-dialog-title"
+                                        open={openId === post.pId}>
                                         <MuiDialogContent>
                                             <div className='dcontainer'>
                                                 <div className='video-part'>
-                                                    <video autoPlay={true} className='video-styles2' controls id={post.id} muted="muted" type="video/mp4" >
-                                                        <source src={post.pUrl} type="video/webm" />
+                                                    <video
+                                                        autoPlay={true}
+                                                        className='video-styles2'
+                                                        controls id={post.pid}
+                                                        muted="muted"
+                                                        type="video/mp4" >
+                                                        <source src={post.pUrl}
+                                                            type="video/webm" />
                                                     </video>
                                                 </div>
                                                 <div className='info-part'>
                                                     <Card>
                                                         <CardHeader
                                                             avatar={
-                                                                <Avatar src={post?.uProfile} aria-label="recipe" className={classes.avatar}>
+                                                                <Avatar
+                                                                    src={post?.uProfile}
+                                                                    aria-label="recipe"
+                                                                    className={classes.avatar}>
                                                                 </Avatar>
                                                             }
                                                             action={
-                                                                <IconButton aria-label="settings">
+                                                                <IconButton
+                                                                    aria-label="settings">
                                                                     <MoreVertIcon />
                                                                 </IconButton>
                                                             }
@@ -155,7 +169,15 @@ function Posts({ userData = null }) {
 
                                                         />
 
-                                                        <hr style={{ border: "none", height: "1px", color: "#dfe6e9", backgroundColor: "#dfe6e9" }} />
+                                                        <hr
+                                                            style={
+                                                                {
+                                                                    border: "none",
+                                                                    height: "1px",
+                                                                    color: "#dfe6e9",
+                                                                    backgroundColor: "#dfe6e9"
+                                                                }
+                                                            } />
                                                         <CardContent className={classes.seeComments}>
 
                                                             <Comments userData={userData} postData={post} />
@@ -164,7 +186,12 @@ function Posts({ userData = null }) {
                                                     </Card>
                                                     <div className='extra'>
                                                         <div className='likes'>
-                                                            <Typography className={classes.typo} variant='body2'>Liked By {post.likes.length == 0 ? 'nobody' : ` others`}</Typography>
+                                                            <Typography
+                                                                className={classes.typo}
+                                                                variant='body2'
+                                                            >Liked By
+                                                                {post.likes.length == 0 ? 'nobody' : ` others`}
+                                                            </Typography>
                                                         </div>
                                                         <AddComment userData={userData} postData={post} />
                                                     </div>

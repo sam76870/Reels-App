@@ -11,6 +11,7 @@ const useStyles = makeStyles({
     }
 })
 function Comments(props) {
+    // console.log(props);
     const classes = useStyles();
     const [comments, setComments] = useState(null);
     useEffect(async () => {
